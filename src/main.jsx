@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { Theme } from '@twilio-paste/core/theme';
 import { Provider } from 'react-redux';
 
@@ -8,7 +8,10 @@ import { store } from './store';
 
 import './index.css';
 
-ReactDOM.render(
+ReactDOM.createRoot(
+  
+  document.getElementById('root')
+).render(
   <Provider store={store}>
     <Theme.Provider theme="default">
       <React.StrictMode>
@@ -16,5 +19,4 @@ ReactDOM.render(
       </React.StrictMode>
     </Theme.Provider>
   </Provider>,
-  document.getElementById('root')
 );
