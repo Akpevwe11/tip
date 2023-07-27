@@ -1,3 +1,7 @@
+// ES6 import
+import {produce} from 'immer';
+
+
 import { ITEM_ADDED, ITEM_REMOVED, ITEM_PRICE_UPDATE, ITEM_QUANTITY_UPDATED } from './action'
 let id = 1;
 
@@ -9,8 +13,14 @@ export const initialItems = [
 export const reducer = (state = initialItems, action) => {
     if(action.type === ITEM_ADDED) {
 
-        const item = { uuid: id++, quantity: 1, ...action.payload };
-        return [...state, item]; 
+        produce(state, (draftState) => {
+
+              const item = { uuid: id++, quantity: 1, ...action.payload };
+              draftState.push(item);  
+        })
+
+        // const item = { uuid: id++, quantity: 1, ...action.payload };
+        // return [...state, item]; 
     };
     if(action.type === ITEM_REMOVED) {
 
@@ -18,13 +28,18 @@ export const reducer = (state = initialItems, action) => {
     }
 
     if(action.type === ITEM_PRICE_UPDATE) {
-        return state.map((item) => {
-            if(item.uuid === action.payload.uuid) {
-                return {...item, price: action.payload.price};
-            }
-            return item; 
-        });
+       return produce(state, (draftState) => {
+        const item = draftState.find((item) => item.uuid === action.payload.uuid); 
+        item.price = parseInt(action.payload.price, 10); 
+       })
     }
+
+     // return state.map((item) => {
+        //     if(item.uuid === action.payload.uuid) {
+        //         return {...item, price: action.payload.price};
+        //     }
+        //     return item; 
+        // });
 
     if(action.type === ITEM_QUANTITY_UPDATED) {
         return state.map((item) => {
